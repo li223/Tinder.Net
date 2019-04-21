@@ -29,16 +29,6 @@
             The refresh token
             </summary>
         </member>
-        <member name="T:Tinder.Net.Objects.MetaObject">
-            <summary>
-            Meta data object
-            </summary>
-        </member>
-        <member name="P:Tinder.Net.Objects.MetaObject.Status">
-            <summary>
-            Status of the request
-            </summary>
-        </member>
         <member name="T:Tinder.Net.Objects.OtpExpectation">
             <summary>
             OtpExpectation Object
@@ -52,6 +42,161 @@
         <member name="P:Tinder.Net.Objects.OtpExpectation.HasSmsSent">
             <summary>
             If the SMS was sent
+            </summary>
+        </member>
+        <member name="T:Tinder.Net.Objects.ValidationData">
+            <summary>
+            ValidationData Object
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.ValidationData.RefreshToken">
+            <summary>
+            Refresh Token
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.ValidationData.Validated">
+            <summary>
+            If validation was successful
+            </summary>
+        </member>
+        <member name="T:Tinder.Net.Objects.Gender">
+            <summary>
+            Gender Enum
+            </summary>
+        </member>
+        <member name="F:Tinder.Net.Objects.Gender.Male">
+            <summary>
+            0 represents male
+            </summary>
+        </member>
+        <member name="F:Tinder.Net.Objects.Gender.Female">
+            <summary>
+            1 represents female
+            </summary>
+        </member>
+        <member name="F:Tinder.Net.Objects.Gender.MaleAndFemale">
+            <summary>
+            2 represents both genders, used in gender preference
+            </summary>
+        </member>
+        <member name="T:Tinder.Net.Objects.Job">
+            <summary>
+            Job Object
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.Job.Company">
+            <summary>
+            Company Data
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.Job.Title">
+            <summary>
+            Title Data
+            </summary>
+        </member>
+        <member name="T:Tinder.Net.Objects.JobGeneric">
+            <summary>
+            Generic Job Object
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.JobGeneric.Name">
+            <summary>
+            Title/Company Name
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.JobGeneric.IsDisplayed">
+            <summary>
+            If displayed on Profile
+            </summary>
+        </member>
+        <member name="T:Tinder.Net.Objects.MetaObject">
+            <summary>
+            Meta data object
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.MetaObject.Status">
+            <summary>
+            Status of the request
+            </summary>
+        </member>
+        <member name="T:Tinder.Net.Objects.Notification">
+            <summary>
+            Notification Object
+            </summary>
+        </member>
+        <member name="T:Tinder.Net.Objects.Photo">
+            <summary>
+            Photo Object
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.Photo.Id">
+            <summary>
+            Photo Id
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.Photo.CropInfo">
+            <summary>
+            Crop Info
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.Photo.Url">
+            <summary>
+            Image Url
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.Photo.FbId">
+            <summary>
+            No Clue
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.Photo.ProcessedFiles">
+            <summary>
+            The Processed Files
+            </summary>
+        </member>
+        <member name="T:Tinder.Net.Objects.SuperLikes">
+            <summary>
+            Super Likes Object
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.SuperLikes.Remaining">
+            <summary>
+            Remaining Super Likes
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.SuperLikes.AlcRemaining">
+            <summary>
+            No Clue
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.SuperLikes.NewAlcRemaining">
+            <summary>
+            No Clue
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.SuperLikes.Allotment">
+            <summary>
+            No Clue
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.SuperLikes.RefreshAmount">
+            <summary>
+            How many times superlike can refresh
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.SuperLikes.RefreshInterval">
+            <summary>
+            How many superlikes are refreshed each interval
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.SuperLikes.RefreshIntervalUnit">
+            <summary>
+            No Clue
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.SuperLikes.ResetsAt">
+            <summary>
+            When the superlikes reset
             </summary>
         </member>
         <member name="T:Tinder.Net.Objects.TinderResponse`1">
@@ -70,19 +215,204 @@
             Data payload
             </summary>
         </member>
-        <member name="T:Tinder.Net.Objects.ValidationData">
+        <member name="T:Tinder.Net.Objects.Account">
             <summary>
-            ValidationData Object
+            Account Object
             </summary>
         </member>
-        <member name="P:Tinder.Net.Objects.ValidationData.RefreshToken">
+        <member name="P:Tinder.Net.Objects.Account.IsEmailVerified">
             <summary>
-            Refresh Token
+            If Email has been verified
             </summary>
         </member>
-        <member name="P:Tinder.Net.Objects.ValidationData.Validated">
+        <member name="P:Tinder.Net.Objects.Account.Email">
             <summary>
-            If validation was successful
+            The email tied to the account
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.Account.PhoneNumber">
+            <summary>
+            Phone number that belongs to the account
+            </summary>
+        </member>
+        <member name="T:Tinder.Net.Objects.UserInfo">
+            <summary>
+            User Info Object
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.UserInfo.Id">
+            <summary>
+            User Id
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.UserInfo.MinAge">
+            <summary>
+            Min Age
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.UserInfo.MaxAge">
+            <summary>
+            Max Age
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.UserInfo.Bio">
+            <summary>
+            User Bio
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.UserInfo.BirthDate">
+            <summary>
+            Date of Birth
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.UserInfo.CreateDate">
+            <summary>
+            Account Creation Date
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.UserInfo.CrmId">
+            <summary>
+            No Clue
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.UserInfo.IsDiscoverable">
+            <summary>
+            Is User discoverable
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.UserInfo.DistanceFilter">
+            <summary>
+            Distance Filter Value
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.UserInfo.Gender">
+            <summary>
+            User's Gender
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.UserInfo.GenderFilter">
+            <summary>
+            User's prefered Gender
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.UserInfo.Name">
+            <summary>
+            User's name
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.UserInfo.Photos">
+            <summary>
+            User's profile photos
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.UserInfo.ArePhotosProcessing">
+            <summary>
+            Are any photos being processed
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.UserInfo.IsPhotoOptimizerEnabled">
+            <summary>
+            Is photo optimisation enabled
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.UserInfo.PingTime">
+            <summary>
+            Time of last ping
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.UserInfo.Jobs">
+            <summary>
+            Jobs the user has
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.UserInfo.Schools">
+            <summary>
+            Schools attending
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.UserInfo.Username">
+            <summary>
+            User's username
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.UserInfo.PhoneId">
+            <summary>
+            User's phone number Id
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.UserInfo.InterestedIn">
+            <summary>
+            Gender User is interested in: Male, Female, Both
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.UserInfo.Position">
+            <summary>
+            User's location
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.UserInfo.AutoplayVideo">
+            <summary>
+            Autoplay Videos
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.UserInfo.IsRegNewRequired">
+            <summary>
+            Is a new registraition required
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.UserInfo.AreTopPicksDiscoverable">
+            <summary>
+            Are top picks discoverable
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.UserInfo.IsPhotoTaggingEnabled">
+            <summary>
+            Is photo tagging enabled
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.UserInfo.IsSnapchatConnected">
+            <summary>
+            Is snapchat connected
+            </summary>
+        </member>
+        <member name="T:Tinder.Net.Objects.UserProfile">
+            <summary>
+            User Profile Object
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.UserProfile.Account">
+            <summary>
+            User account
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.UserProfile.Likes">
+            <summary>
+            Likes remaining
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.UserProfile.Notifications">
+            <summary>
+            User Notifications
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.UserProfile.Spotify">
+            <summary>
+            Spotify Song Data
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.UserProfile.SuperLikes">
+            <summary>
+            Superlikes
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.UserProfile.TinderU">
+            <summary>
+            No Clue
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.UserProfile.Info">
+            <summary>
+            User information
             </summary>
         </member>
         <member name="T:Tinder.Net.Objects.LoginPayload">
@@ -120,6 +450,111 @@
             Is request an update
             </summary>
         </member>
+        <member name="T:Tinder.Net.Objects.Album">
+            <summary>
+            Album Object
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.Album.Name">
+            <summary>
+            Album Name
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.Album.Images">
+            <summary>
+            Album Images
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.Album.Id">
+            <summary>
+            Album Id
+            </summary>
+        </member>
+        <member name="T:Tinder.Net.Objects.Artist">
+            <summary>
+            Artist Object
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.Artist.Name">
+            <summary>
+            Artist's name
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.Artist.Id">
+            <summary>
+            Artist Id
+            </summary>
+        </member>
+        <member name="T:Tinder.Net.Objects.Image">
+            <summary>
+            Image Object
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.Image.Width">
+            <summary>
+            Image Width
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.Image.Height">
+            <summary>
+            Image Height
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.Image.Url">
+            <summary>
+            Image Url
+            </summary>
+        </member>
+        <member name="T:Tinder.Net.Objects.Spotify">
+            <summary>
+            Spotify Object
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.Spotify.IsConnected">
+            <summary>
+            Is Connected
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.Spotify.ThemeTrack">
+            <summary>
+            User theme track
+            </summary>
+        </member>
+        <member name="T:Tinder.Net.Objects.SpotifyTrack">
+            <summary>
+            Spotify Track Object
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.SpotifyTrack.Name">
+            <summary>
+            Track Name
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.SpotifyTrack.Id">
+            <summary>
+            Track Id
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.SpotifyTrack.Uri">
+            <summary>
+            Track Uri - internal to spotify
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.SpotifyTrack.Artists">
+            <summary>
+            Track's Artist(s)
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.SpotifyTrack.PreviewUrl">
+            <summary>
+            Track Preview Url
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.SpotifyTrack.Album">
+            <summary>
+            Track's Album
+            </summary>
+        </member>
         <member name="T:Tinder.Net.TinderClient">
             <summary>
             Main Client
@@ -142,11 +577,12 @@
             Tinder Client Ctor
             </summary>
         </member>
-        <member name="M:Tinder.Net.TinderClient.GetAuthCodeAsync(System.UInt64,System.String,System.String)">
+        <member name="M:Tinder.Net.TinderClient.GetAuthCodeAsync(System.UInt64,System.Int32,System.String,System.String)">
             <summary>
             Get auth code from Tinder, call this method first
             </summary>
             <param name="phone_number">Your Phone Number</param>
+            <param name="area_code">Phone Area Code</param>
             <param name="auth_type">Type of auth</param>
             <param name="locale">Locale</param>
             <returns></returns>
@@ -168,12 +604,15 @@
             <param name="locale">Locale</param>
             <returns></returns>
         </member>
-        <member name="M:Tinder.Net.TinderClient.StartTinderAsync(System.Func{System.Threading.Tasks.Task{System.Int32}},System.UInt64)">
+        <member name="M:Tinder.Net.TinderClient.StartTinderAsync(System.Func{System.Threading.Tasks.Task{System.Int32}},System.UInt64,System.Int32,System.String,System.String)">
             <summary>
             Single method to auth and log into Tinder
             </summary>
             <param name="auth_code">User defined method to get the auth code</param>
             <param name="phone_number">Your phone number</param>
+            <param name="area_code">Phone Area Code</param>
+            <param name="auth_type">Authentication Type</param>
+            <param name="locale">Locale</param>
             <returns>LoginData</returns>
         </member>
     </members>

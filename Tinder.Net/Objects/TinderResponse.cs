@@ -6,7 +6,7 @@ namespace Tinder.Net.Objects
     /// Tinder Response Object
     /// </summary>
     /// <typeparam name="T">Data Type for the Data Property</typeparam>
-    public sealed class TinderResponse<T> where T : struct
+    public sealed class TinderResponse<T>
     {
         /// <summary>
         /// Meta Data for request

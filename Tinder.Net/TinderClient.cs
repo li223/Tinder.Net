@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Tinder.Net.Objects;
@@ -19,8 +20,6 @@ namespace Tinder.Net
         private string _authToken { get; set; }
 
         private string _refreshToken { get; set; }
-
-        private string _wsToken { get; set; }
 
         /// <summary>
         /// Tinder Error Delegate
@@ -44,15 +43,16 @@ namespace Tinder.Net
                 BaseAddress = new Uri("https://api.gotinder.com/v2")
             };
         }
-        
+
         /// <summary>
         /// Get auth code from Tinder, call this method first
         /// </summary>
         /// <param name="phone_number">Your Phone Number</param>
+        /// <param name="area_code">Phone Area Code</param>
         /// <param name="auth_type">Type of auth</param>
         /// <param name="locale">Locale</param>
         /// <returns></returns>
-        private async Task<TinderResponse<OtpExpectation>> GetAuthCodeAsync(ulong phone_number, string auth_type = "sms", string locale = "en-GB")
+        private async Task<TinderResponse<OtpExpectation>> GetAuthCodeAsync(ulong phone_number, int area_code = 44, string auth_type = "sms", string locale = "en-GB")
         {
             if (auth_type != "sms")
             {
@@ -60,10 +60,18 @@ namespace Tinder.Net
                 return null;
             }
             var numstr = phone_number.ToString();
-            if(!numstr.StartsWith("44") && numstr.Length != 13)
+            if(!numstr.StartsWith(area_code.ToString()) && numstr.Length != 13)
             {
-                if (numstr.Length == 11) numstr = $"44{numstr}";
-                else if (numstr.Length == 10) numstr = $"440{numstr}";
+                if (area_code == 44)
+                {
+                    if (numstr.Length == 11) numstr = $"{area_code}{numstr}";
+                    else if (numstr.Length == 10) numstr = $"{area_code}0{numstr}";
+                    else
+                    {
+                        this.TinderClientErrored?.Invoke("Invalid phone number supplied");
+                        return null;
+                    }
+                }
                 else
                 {
                     this.TinderClientErrored?.Invoke("Invalid phone number supplied");
@@ -138,12 +146,30 @@ namespace Tinder.Net
         /// </summary>
         /// <param name="auth_code">User defined method to get the auth code</param>
         /// <param name="phone_number">Your phone number</param>
+        /// <param name="area_code">Phone Area Code</param>
+        /// <param name="auth_type">Authentication Type</param>
+        /// <param name="locale">Locale</param>
         /// <returns>LoginData</returns>
-        public async Task StartTinderAsync(Func<Task<int>> auth_code, ulong phone_number, string auth_type = "sms", string locale = "en-GB")
+        public async Task StartTinderAsync(Func<Task<int>> auth_code, ulong phone_number, int area_code = 44, string auth_type = "sms", string locale = "en-GB")
         {
-            var otpe = await GetAuthCodeAsync(phone_number, auth_type, locale).ConfigureAwait(false);
+            var otpe = await GetAuthCodeAsync(phone_number, area_code, auth_type, locale).ConfigureAwait(false);
             var veri = await VerifyCodeAsync(otpe.Data, await auth_code(), auth_type, locale).ConfigureAwait(false);
             var log = await LoginAsync(locale).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Get the profile of the logged in user
+        /// </summary>
+        /// <param name="locale">Locale</param>
+        /// <returns>User profile</returns>
+        public async Task<TinderResponse<UserProfile>> GetProfileAsync(string locale = "en-GB")
+        {
+            this._http.DefaultRequestHeaders.Add("X-Auth-Key", this._authToken);
+            this._http.DefaultRequestHeaders.Add("accept", "application/json");
+            var res = await _http.GetAsync(new Uri($"{_http.BaseAddress}/profile?include=account%2Cboost%2Cemail_settings%2Cinstagram%2Clikes%2Cnotifications%2Cplus_control%2Cproducts%2Cpurchase%2Cspotify%2Csuper_likes%2Ctinder_u%2Ctravel%2Ctutorials%2Cuser&locale={locale}")).ConfigureAwait(false);
+            var cont = await res.Content.ReadAsStringAsync();
+            var data = JsonConvert.DeserializeObject<TinderResponse<UserProfile>>(cont);
+            return data;
         }
     }
 }
