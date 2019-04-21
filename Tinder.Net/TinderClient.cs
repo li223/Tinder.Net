@@ -42,6 +42,7 @@ namespace Tinder.Net
             {
                 BaseAddress = new Uri("https://api.gotinder.com/v2")
             };
+            this._http.DefaultRequestHeaders.Add("accept", "application/json");
         }
 
         /// <summary>
@@ -164,9 +165,7 @@ namespace Tinder.Net
         /// <returns>User profile</returns>
         public async Task<TinderResponse<UserProfile>> GetProfileAsync(string locale = "en-GB")
         {
-            this._http.DefaultRequestHeaders.Add("X-Auth-Key", this._authToken);
-            this._http.DefaultRequestHeaders.Add("accept", "application/json");
-            var res = await _http.GetAsync(new Uri($"{_http.BaseAddress}/profile?include=account%2Cboost%2Cemail_settings%2Cinstagram%2Clikes%2Cnotifications%2Cplus_control%2Cproducts%2Cpurchase%2Cspotify%2Csuper_likes%2Ctinder_u%2Ctravel%2Ctutorials%2Cuser&locale={locale}")).ConfigureAwait(false);
+            var res = await _http.GetAsync(new Uri($"{_http.BaseAddress}/profile?include=account%2Cemail_settings%2Clikes%2Cnotifications%2Csuper_likes%2Ctinder_u%2Ctravel%2Cuser&locale={locale}")).ConfigureAwait(false);
             var cont = await res.Content.ReadAsStringAsync();
             var data = JsonConvert.DeserializeObject<TinderResponse<UserProfile>>(cont);
             return data;
