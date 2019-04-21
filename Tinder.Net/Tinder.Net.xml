@@ -1,0 +1,180 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Tinder.Net</name>
+    </assembly>
+    <members>
+        <member name="T:Tinder.Net.Objects.LoginData">
+            <summary>
+            Login Data Object
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.LoginData.Id">
+            <summary>
+            Login ID
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.LoginData.IsNewUser">
+            <summary>
+            If the user is signing up
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.LoginData.ApiToken">
+            <summary>
+            The api token
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.LoginData.RefreshToken">
+            <summary>
+            The refresh token
+            </summary>
+        </member>
+        <member name="T:Tinder.Net.Objects.MetaObject">
+            <summary>
+            Meta data object
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.MetaObject.Status">
+            <summary>
+            Status of the request
+            </summary>
+        </member>
+        <member name="T:Tinder.Net.Objects.OtpExpectation">
+            <summary>
+            OtpExpectation Object
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.OtpExpectation.Length">
+            <summary>
+            Length of the auth code
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.OtpExpectation.HasSmsSent">
+            <summary>
+            If the SMS was sent
+            </summary>
+        </member>
+        <member name="T:Tinder.Net.Objects.TinderResponse`1">
+            <summary>
+            Tinder Response Object
+            </summary>
+            <typeparam name="T">Data Type for the Data Property</typeparam>
+        </member>
+        <member name="P:Tinder.Net.Objects.TinderResponse`1.Meta">
+            <summary>
+            Meta Data for request
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.TinderResponse`1.Data">
+            <summary>
+            Data payload
+            </summary>
+        </member>
+        <member name="T:Tinder.Net.Objects.ValidationData">
+            <summary>
+            ValidationData Object
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.ValidationData.RefreshToken">
+            <summary>
+            Refresh Token
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.ValidationData.Validated">
+            <summary>
+            If validation was successful
+            </summary>
+        </member>
+        <member name="T:Tinder.Net.Objects.LoginPayload">
+            <summary>
+            Login Payload
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.LoginPayload.RefreshToken">
+            <summary>
+            Refresh Token
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.LoginPayload.PhoneNumber">
+            <summary>
+            Phone Number
+            </summary>
+        </member>
+        <member name="T:Tinder.Net.Objects.ValidatePayload">
+            <summary>
+            Validation Payload
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.ValidatePayload.OtpCode">
+            <summary>
+            Verification Code
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.ValidatePayload.PhoneNumber">
+            <summary>
+            Phone Number
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.ValidatePayload.IsUpdate">
+            <summary>
+            Is request an update
+            </summary>
+        </member>
+        <member name="T:Tinder.Net.TinderClient">
+            <summary>
+            Main Client
+            </summary>
+        </member>
+        <member name="T:Tinder.Net.TinderClient.TinderError">
+            <summary>
+            Tinder Error Delegate
+            </summary>
+            <param name="message">The error message</param>
+            <returns></returns>
+        </member>
+        <member name="E:Tinder.Net.TinderClient.TinderClientErrored">
+            <summary>
+            Tinder Error Event
+            </summary>
+        </member>
+        <member name="M:Tinder.Net.TinderClient.#ctor">
+            <summary>
+            Tinder Client Ctor
+            </summary>
+        </member>
+        <member name="M:Tinder.Net.TinderClient.GetAuthCodeAsync(System.UInt64,System.String,System.String)">
+            <summary>
+            Get auth code from Tinder, call this method first
+            </summary>
+            <param name="phone_number">Your Phone Number</param>
+            <param name="auth_type">Type of auth</param>
+            <param name="locale">Locale</param>
+            <returns></returns>
+        </member>
+        <member name="M:Tinder.Net.TinderClient.VerifyCodeAsync(Tinder.Net.Objects.OtpExpectation,System.Int32,System.String,System.String)">
+            <summary>
+            Verify the auth code, call this method second
+            </summary>
+            <param name="expectation">"Data" member from the object that is returned after invoking GetAuthCodeAsync</param>
+            <param name="auth_code">The received auth code</param>
+            <param name="auth_type">Type of auth</param>
+            <param name="locale">Locale</param>
+            <returns></returns>
+        </member>
+        <member name="M:Tinder.Net.TinderClient.LoginAsync(System.String)">
+            <summary>
+            Login into Tinder, call this method last
+            </summary>
+            <param name="locale">Locale</param>
+            <returns></returns>
+        </member>
+        <member name="M:Tinder.Net.TinderClient.StartTinderAsync(System.Func{System.Threading.Tasks.Task{System.Int32}},System.UInt64)">
+            <summary>
+            Single method to auth and log into Tinder
+            </summary>
+            <param name="auth_code">User defined method to get the auth code</param>
+            <param name="phone_number">Your phone number</param>
+            <returns>LoginData</returns>
+        </member>
+    </members>
+</doc>
