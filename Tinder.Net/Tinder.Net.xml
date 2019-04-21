@@ -59,6 +59,36 @@
             If validation was successful
             </summary>
         </member>
+        <member name="T:Tinder.Net.Objects.CardProfile">
+            <summary>
+            Non-Logged in user profile
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.CardProfile.CardType">
+            <summary>
+            Card Type
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.CardProfile.UserInfo">
+            <summary>
+            Note: Not all values will be returned
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.CardProfile.Spotify">
+            <summary>
+            User Spotifty Data
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.CardProfile.SequenceNumber">
+            <summary>
+            User Uniquie Sequence Number
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.CardProfile.Teaser">
+            <summary>
+            No Clue
+            </summary>
+        </member>
         <member name="T:Tinder.Net.Objects.Gender">
             <summary>
             Gender Enum
@@ -197,6 +227,26 @@
         <member name="P:Tinder.Net.Objects.SuperLikes.ResetsAt">
             <summary>
             When the superlikes reset
+            </summary>
+        </member>
+        <member name="T:Tinder.Net.Objects.SwipeType">
+            <summary>
+            Swipe Type
+            </summary>
+        </member>
+        <member name="F:Tinder.Net.Objects.SwipeType.Pass">
+            <summary>
+            Pass on the user
+            </summary>
+        </member>
+        <member name="F:Tinder.Net.Objects.SwipeType.Like">
+            <summary>
+            Like the user
+            </summary>
+        </member>
+        <member name="F:Tinder.Net.Objects.SwipeType.Superlike">
+            <summary>
+            Super Like the user
             </summary>
         </member>
         <member name="T:Tinder.Net.Objects.TinderResponse`1">
@@ -621,6 +671,22 @@
             </summary>
             <param name="locale">Locale</param>
             <returns>User profile</returns>
+        </member>
+        <member name="M:Tinder.Net.TinderClient.GetCardsAsync(System.String)">
+            <summary>
+            Get a set of users to match with
+            </summary>
+            <param name="locale"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Tinder.Net.TinderClient.SwipeAsync(Tinder.Net.Objects.SwipeType,System.UInt64,System.String)">
+            <summary>
+            Swipe on a user
+            </summary>
+            <param name="swipe_type">Type of swipe</param>
+            <param name="s_number">User's Sequence Number</param>
+            <param name="locale">Locale</param>
+            <returns>True, if successful</returns>
         </member>
     </members>
 </doc>
