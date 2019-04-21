@@ -139,11 +139,11 @@ namespace Tinder.Net
         /// <param name="auth_code">User defined method to get the auth code</param>
         /// <param name="phone_number">Your phone number</param>
         /// <returns>LoginData</returns>
-        public async Task StartTinderAsync(Func<Task<int>> auth_code, ulong phone_number)
+        public async Task StartTinderAsync(Func<Task<int>> auth_code, ulong phone_number, string auth_type = "sms", string locale = "en-GB")
         {
-            var otpe = await GetAuthCodeAsync(phone_number).ConfigureAwait(false);
-            var veri = await VerifyCodeAsync(otpe.Data, await auth_code()).ConfigureAwait(false);
-            var log = await LoginAsync().ConfigureAwait(false);
+            var otpe = await GetAuthCodeAsync(phone_number, auth_type, locale).ConfigureAwait(false);
+            var veri = await VerifyCodeAsync(otpe.Data, await auth_code(), auth_type, locale).ConfigureAwait(false);
+            var log = await LoginAsync(locale).ConfigureAwait(false);
         }
     }
 }
