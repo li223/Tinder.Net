@@ -12,7 +12,7 @@ static async Task Main(string[] args)
 {
   //Initialise the client
   var client = new TinderClient();
-  //Start Tiner, params: Callback is a method used to get the auth code from the user and the number is in format <AreaCode><FullNumber>
+  //Start Tidner, params: Callback is a method used to get the auth code from the user and the number is in format <AreaCode><FullNumber>
   await client.StartTinderAsync(Callback, 4412345678901);
   //Keep Console Open
   Console.ReadKey();
