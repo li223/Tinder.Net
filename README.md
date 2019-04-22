@@ -2,7 +2,7 @@
 Wrapper for Tinder's api. Use this at your own risk. You'll very likely get shadow banned within a day.
 
 # Warning Again
-Like I sadi before, use at your own risk. I take no responsibility if you get hammered.
+Like I said before, use at your own risk. I take no responsibility if you get hammered.
 
 # If something is broken
 If something breaks send the stacktrace and the api response. I will try my best to bodge a fix or addition
