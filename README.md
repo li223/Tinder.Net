@@ -1,8 +1,11 @@
 # Tinder.Net
-Because why not?
+Wrapper for Tinder's api. Use this at your own risk. You'll very likely get shadow banned within a day.
 
-# Why?
-I am a very bored person, so I created whatever this is.
+# Warning Again
+Like I sadi before, use at your own risk. I take no responsibility if you get hammered.
+
+# If something is broken
+If something breaks send the stacktrace and the api response. I will try my best to bodge a fix or addition
 
 # Example
 Note: This will only work for those in the UK and via SMS Authentication. However, I do aim to change this later on.
