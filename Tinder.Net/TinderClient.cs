@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,7 +41,7 @@ namespace Tinder.Net
         {
             _http = new HttpClient()
             {
-                BaseAddress = new Uri("https://api.gotinder.com/v2")
+                BaseAddress = new Uri("https://api.gotinder.com")
             };
             this._http.DefaultRequestHeaders.Add("accept", "application/json");
         }
@@ -83,7 +81,7 @@ namespace Tinder.Net
                 }
             }
             this._phoneNumber = ulong.Parse(numstr);
-            var res = await _http.PostAsync($"{_http.BaseAddress}/auth/sms/send?auth_type={auth_type}&locale={locale}", new StringContent(string.Concat(@"{""phone_number"":""", this._phoneNumber,@"""}"), Encoding.UTF8, "application/json")).ConfigureAwait(false);
+            var res = await _http.PostAsync($"{_http.BaseAddress}/v2/auth/sms/send?auth_type={auth_type}&locale={locale}", new StringContent(string.Concat(@"{""phone_number"":""", this._phoneNumber,@"""}"), Encoding.UTF8, "application/json")).ConfigureAwait(false);
             var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
             var data = JsonConvert.DeserializeObject<TinderResponse<OtpExpectation>>(cont);
             if (!data.Data.HasSmsSent) TinderClientErrored?.Invoke("Otp Token has not been sent");
@@ -110,7 +108,7 @@ namespace Tinder.Net
                 this.TinderClientErrored?.Invoke("Auth Code is not the expected Length");
                 return null;
             }
-            var res = await _http.PostAsync(new Uri($"{_http.BaseAddress}/auth/sms/validate?auth_type={auth_type}&locale={locale}"), new StringContent(JsonConvert.SerializeObject(new ValidatePayload()
+            var res = await _http.PostAsync(new Uri($"{_http.BaseAddress}/v2/auth/sms/validate?auth_type={auth_type}&locale={locale}"), new StringContent(JsonConvert.SerializeObject(new ValidatePayload()
             {
                 IsUpdate = false,
                 OtpCode = auth_code.ToString(),
@@ -135,7 +133,7 @@ namespace Tinder.Net
                 this.TinderClientErrored?.Invoke("GetAuthCodeAsync and VerifyAsync must be called before invoking this method");
                 return null;
             }
-            var res = await _http.PostAsync(new Uri($"{_http.BaseAddress}/auth/login/sms?locale={locale}"), new StringContent(JsonConvert.SerializeObject(new LoginPayload()
+            var res = await _http.PostAsync(new Uri($"{_http.BaseAddress}/v2/auth/login/sms?locale={locale}"), new StringContent(JsonConvert.SerializeObject(new LoginPayload()
             {
                 PhoneNumber = this._phoneNumber,
                 RefreshToken = this._refreshToken
@@ -171,7 +169,7 @@ namespace Tinder.Net
         /// <returns>User profile</returns>
         public async Task<TinderResponse<UserProfile>> GetProfileAsync(string locale = "en-GB")
         {
-            var res = await _http.GetAsync(new Uri($"{_http.BaseAddress}/profile?include=account%2Cemail_settings%2Clikes%2Cnotifications%2Csuper_likes%2Ctinder_u%2Ctravel%2Cuser&locale={locale}")).ConfigureAwait(false);
+            var res = await _http.GetAsync(new Uri($"{_http.BaseAddress}/v2/profile?include=account%2Cemail_settings%2Clikes%2Cnotifications%2Csuper_likes%2Ctinder_u%2Ctravel%2Cuser&locale={locale}")).ConfigureAwait(false);
             var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
             var data = JsonConvert.DeserializeObject<TinderResponse<UserProfile>>(cont);
             return data;
@@ -184,7 +182,7 @@ namespace Tinder.Net
         /// <returns></returns>
         public async Task<TinderResponse<Annoyance>> GetCardsAsync(string locale="en-GB")
         {
-            var res = await _http.GetAsync(new Uri($"{_http.BaseAddress}/recs/core?locale={locale}")).ConfigureAwait(false);
+            var res = await _http.GetAsync(new Uri($"{_http.BaseAddress}/v2/recs/core?locale={locale}")).ConfigureAwait(false);
             var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
             var data = JsonConvert.DeserializeObject<TinderResponse<Annoyance>>(cont);
             return data;
@@ -199,7 +197,7 @@ namespace Tinder.Net
         /// <returns>True, if successful</returns>
         public async Task<bool> SwipeAsync(SwipeType swipe_type, ulong s_number, string locale = "en-GB")
         {
-            var res = await _http.GetAsync($"https://api.gotinder.com/{swipe_type}/{this._id}?locale={locale}&s_number={s_number}").ConfigureAwait(false);
+            var res = await _http.GetAsync($"{this._http.BaseAddress}/{swipe_type}/{this._id}?locale={locale}&s_number={s_number}").ConfigureAwait(false);
             return res.IsSuccessStatusCode;
         }
     }
