@@ -172,6 +172,7 @@ namespace Tinder.Net
             var res = await Http.GetAsync(new Uri($"{Http.BaseAddress}/v2/profile?include=account%2Cemail_settings%2Clikes%2Cnotifications%2Csuper_likes%2Ctinder_u%2Ctravel%2Cuser&locale={locale}")).ConfigureAwait(false);
             var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
             var data = JsonConvert.DeserializeObject<TinderResponse<UserProfile>>(cont);
+            if(data?.Error != null) this.TinderClientErrored?.Invoke(data.Error?.Message);
             return data;
         }
 
@@ -185,6 +186,7 @@ namespace Tinder.Net
             var res = await Http.GetAsync(new Uri($"{Http.BaseAddress}/v2/recs/core?locale={locale}")).ConfigureAwait(false);
             var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
             var data = JsonConvert.DeserializeObject<TinderResponse<Annoyance>>(cont);
+            if (data?.Error != null) this.TinderClientErrored?.Invoke(data.Error?.Message);
             return data;
         }
 
@@ -199,7 +201,7 @@ namespace Tinder.Net
         {
             var res = await this.Http.GetAsync(new Uri($"{this.Http.BaseAddress}/like/{user_id}/super?locale={locale}&s_number={s_number}")).ConfigureAwait(false);
             var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
-            if (res.IsSuccessStatusCode) this.TinderClientErrored?.Invoke(cont);
+            if (!res.IsSuccessStatusCode) this.TinderClientErrored?.Invoke(cont);
             return cont;
         }
 
@@ -214,7 +216,7 @@ namespace Tinder.Net
         {
             var res = await this.Http.GetAsync(new Uri($"{this.Http.BaseAddress}/like/{user_id}?locale={locale}&s_number={s_number}")).ConfigureAwait(false);
             var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
-            if (res.IsSuccessStatusCode) this.TinderClientErrored?.Invoke(cont);
+            if (!res.IsSuccessStatusCode) this.TinderClientErrored?.Invoke(cont);
             return cont;
         }
 
@@ -229,7 +231,7 @@ namespace Tinder.Net
         {
             var res = await this.Http.GetAsync(new Uri($"{this.Http.BaseAddress}/pass/{user_id}?locale={locale}&s_number={s_number}")).ConfigureAwait(false);
             var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
-            if (res.IsSuccessStatusCode) this.TinderClientErrored?.Invoke(cont);
+            if (!res.IsSuccessStatusCode) this.TinderClientErrored?.Invoke(cont);
             return cont;
         }
 
@@ -260,7 +262,7 @@ namespace Tinder.Net
             }
             var res = await this.Http.GetAsync(url).ConfigureAwait(false);
             var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
-            if (res.IsSuccessStatusCode) this.TinderClientErrored?.Invoke(cont);
+            if (!res.IsSuccessStatusCode) this.TinderClientErrored?.Invoke(cont);
             return cont;
         }
     }
