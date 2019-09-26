@@ -33,11 +33,12 @@ namespace Tinder.Net
         /// </summary>
         public TinderClient()
         {
-            Http = new HttpClient()
+            this.Http = new HttpClient()
             {
                 BaseAddress = new Uri("https://api.gotinder.com")
             };
             this.Http.DefaultRequestHeaders.Add("accept", "application/json");
+            this.CurrentUser = new CurrentUser();
         }
 
         /// <summary>
