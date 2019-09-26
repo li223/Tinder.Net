@@ -14,13 +14,7 @@ namespace Tinder.Net
     {
         private HttpClient Http { get; set; }
 
-        private ulong PhoneNumber { get; set; }
-
-        private string AuthToken { get; set; }
-
-        private string RefreshToken { get; set; }
-
-        private string Id { get; set; }
+        private CurrentUser CurrentUser { get; set; }
 
         /// <summary>
         /// Tinder Error Delegate
@@ -80,8 +74,8 @@ namespace Tinder.Net
                     return null;
                 }
             }
-            this.PhoneNumber = ulong.Parse(numstr);
-            var res = await Http.PostAsync($"{Http.BaseAddress}/v2/auth/sms/send?auth_type={auth_type}&locale={locale}", new StringContent(string.Concat(@"{""phone_number"":""", this.PhoneNumber,@"""}"), Encoding.UTF8, "application/json")).ConfigureAwait(false);
+            this.CurrentUser.PhoneNumber = ulong.Parse(numstr);
+            var res = await Http.PostAsync($"{Http.BaseAddress}/v2/auth/sms/send?auth_type={auth_type}&locale={locale}", new StringContent(string.Concat(@"{""phone_number"":""", this.CurrentUser.PhoneNumber,@"""}"), Encoding.UTF8, "application/json")).ConfigureAwait(false);
             var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
             var data = JsonConvert.DeserializeObject<TinderResponse<OtpExpectation>>(cont);
             if (!data.Data.HasSmsSent) TinderClientErrored?.Invoke("Otp Token has not been sent");
@@ -112,12 +106,12 @@ namespace Tinder.Net
             {
                 IsUpdate = false,
                 OtpCode = auth_code.ToString(),
-                PhoneNumber = this.PhoneNumber.ToString()
+                PhoneNumber = this.CurrentUser.PhoneNumber.ToString()
             }), Encoding.UTF8, "application/json")).ConfigureAwait(false);
             var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
             var data = JsonConvert.DeserializeObject<TinderResponse<ValidationData>>(cont);
             if (!data.Data.Validated) TinderClientErrored?.Invoke("Validation has Failed");
-            this.RefreshToken = data.Data.RefreshToken;
+            this.CurrentUser.RefreshToken = data.Data.RefreshToken;
             return data;
         }
 
@@ -128,15 +122,15 @@ namespace Tinder.Net
         /// <returns></returns>
         private async Task<TinderResponse<LoginData>> LoginAsync(string locale = "en-GB")
         {
-            if(this.PhoneNumber == 0 || this.RefreshToken == null)
+            if(this.CurrentUser.PhoneNumber == 0 || this.CurrentUser.RefreshToken == null)
             {
                 this.TinderClientErrored?.Invoke("GetAuthCodeAsync and VerifyAsync must be called before invoking this method");
                 return null;
             }
             var res = await Http.PostAsync(new Uri($"{Http.BaseAddress}/v2/auth/login/sms?locale={locale}"), new StringContent(JsonConvert.SerializeObject(new LoginPayload()
             {
-                PhoneNumber = this.PhoneNumber,
-                RefreshToken = this.RefreshToken
+                PhoneNumber = this.CurrentUser.PhoneNumber,
+                RefreshToken = this.CurrentUser.RefreshToken
             }), Encoding.UTF8, "application/json")).ConfigureAwait(false);
             var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
             var data = JsonConvert.DeserializeObject<TinderResponse<LoginData>>(cont);
@@ -145,9 +139,9 @@ namespace Tinder.Net
                 this.TinderClientErrored?.Invoke(data.Error?.Message);
                 return data;
             }
-            this.AuthToken = data.Data.ApiToken;
-            this.Id = data.Data.Id;
-            this.Http.DefaultRequestHeaders.Add("X-Auth-Token", this.AuthToken);
+            this.CurrentUser.AuthToken = data.Data.ApiToken;
+            this.CurrentUser.Id = data.Data.Id;
+            this.Http.DefaultRequestHeaders.Add("X-Auth-Token", this.CurrentUser.AuthToken);
             return data;
         }
 
@@ -194,19 +188,6 @@ namespace Tinder.Net
         }
 
         /// <summary>
-        /// Swipe on a user
-        /// </summary>
-        /// <param name="swipe_type">Type of swipe</param>
-        /// <param name="s_number">User's Sequence Number</param>
-        /// <param name="locale">Locale</param>
-        /// <returns>True, if successful</returns>
-        public async Task<bool> SwipeAsync(SwipeType swipe_type, ulong s_number, string locale = "en-GB")
-        {
-            var res = await this.Http.GetAsync($"{this.Http.BaseAddress}/{swipe_type}/{this.Id}?locale={locale}&s_number={s_number}").ConfigureAwait(false);
-            return res.IsSuccessStatusCode;
-        }
-
-        /// <summary>
         /// Superlike a user
         /// </summary>
         /// <param name="user_id">User Id</param>
@@ -246,12 +227,12 @@ namespace Tinder.Net
         }
 
         /// <summary>
-        /// Perform an action (Like, Superlike, Pass) on a user.
+        /// Perform a swipe action (Like, Superlike, Pass) on a user.
         /// </summary>
         /// <param name="user_id">User Id</param>
-        /// <param name="type">Action Type (Like, Superlike, Pass)</param>
+        /// <param name="type">Swipe Type (Like, Superlike, Pass)</param>
         /// <returns></returns>
-        public async Task<object> PerformActionAsync(string user_id, SwipeType type)
+        public async Task<object> SwipeAsync(string user_id, SwipeType type)
         {
             Uri url;
             switch(type)
