@@ -206,7 +206,7 @@ namespace Tinder.Net
         /// </summary>
         /// <param name="user_id">User Id</param>
         /// <returns>Unknown</returns>
-        public async Task<object> SuperLikeAsync(ulong user_id)
+        public async Task<object> SuperLikeAsync(string user_id)
         {
             var res = await this.Http.GetAsync(new Uri($"{this.Http.BaseAddress}/like/{user_id}/super")).ConfigureAwait(false);
             var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -219,7 +219,7 @@ namespace Tinder.Net
         /// </summary>
         /// <param name="user_id">User Id</param>
         /// <returns>Unknown</returns>
-        public async Task<object> LikeAsync(ulong user_id)
+        public async Task<object> LikeAsync(string user_id)
         {
             var res = await this.Http.GetAsync(new Uri($"{this.Http.BaseAddress}/like/{user_id}")).ConfigureAwait(false);
             var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -232,7 +232,7 @@ namespace Tinder.Net
         /// </summary>
         /// <param name="user_id">User Id</param>
         /// <returns>Unknown</returns>
-        public async Task<object> PassAsync(ulong user_id)
+        public async Task<object> PassAsync(string user_id)
         {
             var res = await this.Http.GetAsync(new Uri($"{this.Http.BaseAddress}/pass/{user_id}")).ConfigureAwait(false);
             var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -246,7 +246,7 @@ namespace Tinder.Net
         /// <param name="user_id">User Id</param>
         /// <param name="type">Action Type (Like, Superlike, Pass)</param>
         /// <returns></returns>
-        public async Task<object> PerformActionAsync(ulong user_id, TinderActionType type)
+        public async Task<object> PerformActionAsync(string user_id, TinderActionType type)
         {
             Uri url;
             switch(type)

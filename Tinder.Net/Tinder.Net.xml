@@ -708,28 +708,28 @@
             <param name="locale">Locale</param>
             <returns>True, if successful</returns>
         </member>
-        <member name="M:Tinder.Net.TinderClient.SuperLikeAsync(System.UInt64)">
+        <member name="M:Tinder.Net.TinderClient.SuperLikeAsync(System.String)">
             <summary>
             Superlike a user
             </summary>
             <param name="user_id">User Id</param>
             <returns>Unknown</returns>
         </member>
-        <member name="M:Tinder.Net.TinderClient.LikeAsync(System.UInt64)">
+        <member name="M:Tinder.Net.TinderClient.LikeAsync(System.String)">
             <summary>
             Like a user
             </summary>
             <param name="user_id">User Id</param>
             <returns>Unknown</returns>
         </member>
-        <member name="M:Tinder.Net.TinderClient.PassAsync(System.UInt64)">
+        <member name="M:Tinder.Net.TinderClient.PassAsync(System.String)">
             <summary>
             Pass on a user
             </summary>
             <param name="user_id">User Id</param>
             <returns>Unknown</returns>
         </member>
-        <member name="M:Tinder.Net.TinderClient.PerformActionAsync(System.UInt64,Tinder.Net.TinderActionType)">
+        <member name="M:Tinder.Net.TinderClient.PerformActionAsync(System.String,Tinder.Net.TinderActionType)">
             <summary>
             Perform an action (Like, Superlike, Pass) on a user.
             </summary>
