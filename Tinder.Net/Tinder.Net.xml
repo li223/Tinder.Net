@@ -61,7 +61,7 @@
         </member>
         <member name="T:Tinder.Net.Objects.CardProfile">
             <summary>
-            Non-Logged in user profile
+            Card Profiles for the stack
             </summary>
         </member>
         <member name="P:Tinder.Net.Objects.CardProfile.CardType">
@@ -71,7 +71,7 @@
         </member>
         <member name="P:Tinder.Net.Objects.CardProfile.UserInfo">
             <summary>
-            Note: Not all values will be returned
+            UserInfo - Note: Not all values will be returned
             </summary>
         </member>
         <member name="P:Tinder.Net.Objects.CardProfile.Spotify">
@@ -137,16 +137,6 @@
         <member name="P:Tinder.Net.Objects.JobGeneric.IsDisplayed">
             <summary>
             If displayed on Profile
-            </summary>
-        </member>
-        <member name="T:Tinder.Net.Objects.MetaObject">
-            <summary>
-            Meta data object
-            </summary>
-        </member>
-        <member name="P:Tinder.Net.Objects.MetaObject.Status">
-            <summary>
-            Status of the request
             </summary>
         </member>
         <member name="T:Tinder.Net.Objects.Notification">
@@ -263,6 +253,11 @@
         <member name="P:Tinder.Net.Objects.TinderResponse`1.Data">
             <summary>
             Data payload
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.TinderResponse`1.Error">
+            <summary>
+            Error payload
             </summary>
         </member>
         <member name="T:Tinder.Net.Objects.Account">
@@ -465,6 +460,21 @@
             User information
             </summary>
         </member>
+        <member name="T:Tinder.Net.Objects.ErrorObject">
+            <summary>
+            Error Object
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.ErrorObject.Code">
+            <summary>
+            Error Code
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.ErrorObject.Message">
+            <summary>
+            Error Message
+            </summary>
+        </member>
         <member name="T:Tinder.Net.Objects.LoginPayload">
             <summary>
             Login Payload
@@ -478,6 +488,16 @@
         <member name="P:Tinder.Net.Objects.LoginPayload.PhoneNumber">
             <summary>
             Phone Number
+            </summary>
+        </member>
+        <member name="T:Tinder.Net.Objects.MetaObject">
+            <summary>
+            Meta data object
+            </summary>
+        </member>
+        <member name="P:Tinder.Net.Objects.MetaObject.Status">
+            <summary>
+            Status of the request
             </summary>
         </member>
         <member name="T:Tinder.Net.Objects.ValidatePayload">

@@ -4,9 +4,9 @@ using System.Collections.Generic;
 namespace Tinder.Net.Objects
 {
     /// <summary>
-    /// Non-Logged in user profile
+    /// Card Profiles for the stack
     /// </summary>
-    public struct CardProfile
+    public class CardProfile
     {
         /// <summary>
         /// Card Type
@@ -15,7 +15,7 @@ namespace Tinder.Net.Objects
         public string CardType { get; private set; }
 
         /// <summary>
-        /// Note: Not all values will be returned
+        /// UserInfo - Note: Not all values will be returned
         /// </summary>
         [JsonProperty("user")]
         public UserInfo UserInfo { get; private set; }

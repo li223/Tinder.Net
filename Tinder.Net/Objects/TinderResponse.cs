@@ -19,5 +19,11 @@ namespace Tinder.Net.Objects
         /// </summary>
         [JsonProperty("data")]
         public T Data { get; private set; }
+
+        /// <summary>
+        /// Error payload
+        /// </summary>
+        [JsonProperty("error")]
+        public ErrorObject? Error { get; private set; }
     }
 }

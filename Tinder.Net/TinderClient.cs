@@ -140,6 +140,11 @@ namespace Tinder.Net
             }), Encoding.UTF8, "application/json")).ConfigureAwait(false);
             var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
             var data = JsonConvert.DeserializeObject<TinderResponse<LoginData>>(cont);
+            if(data?.Error != null)
+            {
+                this.TinderClientErrored?.Invoke(data.Error?.Message);
+                return data;
+            }
             this.AuthToken = data.Data.ApiToken;
             this.Id = data.Data.Id;
             this.Http.DefaultRequestHeaders.Add("X-Auth-Token", this.AuthToken);
