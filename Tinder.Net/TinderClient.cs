@@ -192,10 +192,12 @@ namespace Tinder.Net
         /// Superlike a user
         /// </summary>
         /// <param name="user_id">User Id</param>
+        /// <param name="s_number">User Sequence Number</param>
+        /// <param name="locale">Locale</param>
         /// <returns>Unknown</returns>
-        public async Task<object> SuperLikeAsync(string user_id)
+        public async Task<object> SuperLikeAsync(string user_id, ulong s_number, string locale = "en-GB")
         {
-            var res = await this.Http.GetAsync(new Uri($"{this.Http.BaseAddress}/like/{user_id}/super")).ConfigureAwait(false);
+            var res = await this.Http.GetAsync(new Uri($"{this.Http.BaseAddress}/like/{user_id}/super?locale={locale}&s_number={s_number}")).ConfigureAwait(false);
             var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
             if (res.IsSuccessStatusCode) this.TinderClientErrored?.Invoke(cont);
             return cont;
@@ -205,10 +207,12 @@ namespace Tinder.Net
         /// Like a user
         /// </summary>
         /// <param name="user_id">User Id</param>
+        /// <param name="s_number">User Sequence Number</param>
+        /// <param name="locale">Locale</param>
         /// <returns>Unknown</returns>
-        public async Task<object> LikeAsync(string user_id)
+        public async Task<object> LikeAsync(string user_id, ulong s_number, string locale = "en-GB")
         {
-            var res = await this.Http.GetAsync(new Uri($"{this.Http.BaseAddress}/like/{user_id}")).ConfigureAwait(false);
+            var res = await this.Http.GetAsync(new Uri($"{this.Http.BaseAddress}/like/{user_id}?locale={locale}&s_number={s_number}")).ConfigureAwait(false);
             var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
             if (res.IsSuccessStatusCode) this.TinderClientErrored?.Invoke(cont);
             return cont;
@@ -218,10 +222,12 @@ namespace Tinder.Net
         /// Pass on a user
         /// </summary>
         /// <param name="user_id">User Id</param>
+        /// <param name="s_number">User Sequence Number</param>
+        /// <param name="locale">Locale</param>
         /// <returns>Unknown</returns>
-        public async Task<object> PassAsync(string user_id)
+        public async Task<object> PassAsync(string user_id, ulong s_number, string locale = "en-GB")
         {
-            var res = await this.Http.GetAsync(new Uri($"{this.Http.BaseAddress}/pass/{user_id}")).ConfigureAwait(false);
+            var res = await this.Http.GetAsync(new Uri($"{this.Http.BaseAddress}/pass/{user_id}?locale={locale}&s_number={s_number}")).ConfigureAwait(false);
             var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
             if (res.IsSuccessStatusCode) this.TinderClientErrored?.Invoke(cont);
             return cont;
@@ -231,23 +237,25 @@ namespace Tinder.Net
         /// Perform a swipe action (Like, Superlike, Pass) on a user.
         /// </summary>
         /// <param name="user_id">User Id</param>
+        /// <param name="s_number">User Sequence Number</param>
         /// <param name="type">Swipe Type (Like, Superlike, Pass)</param>
+        /// <param name="locale">Locale</param>
         /// <returns></returns>
-        public async Task<object> SwipeAsync(string user_id, SwipeType type)
+        public async Task<object> SwipeAsync(string user_id, ulong s_number, SwipeType type, string locale = "en-GB")
         {
             Uri url;
             switch(type)
             {
                 case SwipeType.Like:
-                    url = new Uri($"{this.Http.BaseAddress}/like/{user_id}");
+                    url = new Uri($"{this.Http.BaseAddress}/like/{user_id}?locale={locale}&s_number={s_number}");
                     break;
 
                 case SwipeType.Superlike:
-                    url = new Uri($"{this.Http.BaseAddress}/like/{user_id}/super");
+                    url = new Uri($"{this.Http.BaseAddress}/like/{user_id}/super?locale={locale}&s_number={s_number}");
                     break;
 
                 default:
-                    url = new Uri($"{this.Http.BaseAddress}/pass/{user_id}");
+                    url = new Uri($"{this.Http.BaseAddress}/pass/{user_id}?locale={locale}&s_number={s_number}");
                     break;
             }
             var res = await this.Http.GetAsync(url).ConfigureAwait(false);
