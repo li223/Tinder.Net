@@ -12,15 +12,15 @@ namespace Tinder.Net
     /// </summary>
     public class TinderClient
     {
-        private HttpClient _http { get; set; }
+        private HttpClient Http { get; set; }
 
-        private ulong _phoneNumber { get; set; }
+        private ulong PhoneNumber { get; set; }
 
-        private string _authToken { get; set; }
+        private string AuthToken { get; set; }
 
-        private string _refreshToken { get; set; }
+        private string RefreshToken { get; set; }
 
-        private string _id { get; set; }
+        private string Id { get; set; }
 
         /// <summary>
         /// Tinder Error Delegate
@@ -39,11 +39,11 @@ namespace Tinder.Net
         /// </summary>
         public TinderClient()
         {
-            _http = new HttpClient()
+            Http = new HttpClient()
             {
                 BaseAddress = new Uri("https://api.gotinder.com")
             };
-            this._http.DefaultRequestHeaders.Add("accept", "application/json");
+            this.Http.DefaultRequestHeaders.Add("accept", "application/json");
         }
 
         /// <summary>
@@ -80,8 +80,8 @@ namespace Tinder.Net
                     return null;
                 }
             }
-            this._phoneNumber = ulong.Parse(numstr);
-            var res = await _http.PostAsync($"{_http.BaseAddress}/v2/auth/sms/send?auth_type={auth_type}&locale={locale}", new StringContent(string.Concat(@"{""phone_number"":""", this._phoneNumber,@"""}"), Encoding.UTF8, "application/json")).ConfigureAwait(false);
+            this.PhoneNumber = ulong.Parse(numstr);
+            var res = await Http.PostAsync($"{Http.BaseAddress}/v2/auth/sms/send?auth_type={auth_type}&locale={locale}", new StringContent(string.Concat(@"{""phone_number"":""", this.PhoneNumber,@"""}"), Encoding.UTF8, "application/json")).ConfigureAwait(false);
             var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
             var data = JsonConvert.DeserializeObject<TinderResponse<OtpExpectation>>(cont);
             if (!data.Data.HasSmsSent) TinderClientErrored?.Invoke("Otp Token has not been sent");
@@ -108,16 +108,16 @@ namespace Tinder.Net
                 this.TinderClientErrored?.Invoke("Auth Code is not the expected Length");
                 return null;
             }
-            var res = await _http.PostAsync(new Uri($"{_http.BaseAddress}/v2/auth/sms/validate?auth_type={auth_type}&locale={locale}"), new StringContent(JsonConvert.SerializeObject(new ValidatePayload()
+            var res = await Http.PostAsync(new Uri($"{Http.BaseAddress}/v2/auth/sms/validate?auth_type={auth_type}&locale={locale}"), new StringContent(JsonConvert.SerializeObject(new ValidatePayload()
             {
                 IsUpdate = false,
                 OtpCode = auth_code.ToString(),
-                PhoneNumber = this._phoneNumber.ToString()
+                PhoneNumber = this.PhoneNumber.ToString()
             }), Encoding.UTF8, "application/json")).ConfigureAwait(false);
             var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
             var data = JsonConvert.DeserializeObject<TinderResponse<ValidationData>>(cont);
             if (!data.Data.Validated) TinderClientErrored?.Invoke("Validation has Failed");
-            this._refreshToken = data.Data.RefreshToken;
+            this.RefreshToken = data.Data.RefreshToken;
             return data;
         }
 
@@ -128,21 +128,21 @@ namespace Tinder.Net
         /// <returns></returns>
         private async Task<TinderResponse<LoginData>> LoginAsync(string locale = "en-GB")
         {
-            if(this._phoneNumber == 0 || this._refreshToken == null)
+            if(this.PhoneNumber == 0 || this.RefreshToken == null)
             {
                 this.TinderClientErrored?.Invoke("GetAuthCodeAsync and VerifyAsync must be called before invoking this method");
                 return null;
             }
-            var res = await _http.PostAsync(new Uri($"{_http.BaseAddress}/v2/auth/login/sms?locale={locale}"), new StringContent(JsonConvert.SerializeObject(new LoginPayload()
+            var res = await Http.PostAsync(new Uri($"{Http.BaseAddress}/v2/auth/login/sms?locale={locale}"), new StringContent(JsonConvert.SerializeObject(new LoginPayload()
             {
-                PhoneNumber = this._phoneNumber,
-                RefreshToken = this._refreshToken
+                PhoneNumber = this.PhoneNumber,
+                RefreshToken = this.RefreshToken
             }), Encoding.UTF8, "application/json")).ConfigureAwait(false);
             var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
             var data = JsonConvert.DeserializeObject<TinderResponse<LoginData>>(cont);
-            this._authToken = data.Data.ApiToken;
-            this._id = data.Data.Id;
-            this._http.DefaultRequestHeaders.Add("X-Auth-Token", this._authToken);
+            this.AuthToken = data.Data.ApiToken;
+            this.Id = data.Data.Id;
+            this.Http.DefaultRequestHeaders.Add("X-Auth-Token", this.AuthToken);
             return data;
         }
 
@@ -158,8 +158,8 @@ namespace Tinder.Net
         public async Task StartTinderAsync(Func<Task<int>> auth_code, ulong phone_number, int area_code = 44, string auth_type = "sms", string locale = "en-GB")
         {
             var otpe = await GetAuthCodeAsync(phone_number, area_code, auth_type, locale).ConfigureAwait(false);
-            var veri = await VerifyCodeAsync(otpe.Data, await auth_code(), auth_type, locale).ConfigureAwait(false);
-            var log = await LoginAsync(locale).ConfigureAwait(false);
+            await VerifyCodeAsync(otpe.Data, await auth_code(), auth_type, locale).ConfigureAwait(false);
+            await LoginAsync(locale).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -169,7 +169,7 @@ namespace Tinder.Net
         /// <returns>User profile</returns>
         public async Task<TinderResponse<UserProfile>> GetProfileAsync(string locale = "en-GB")
         {
-            var res = await _http.GetAsync(new Uri($"{_http.BaseAddress}/v2/profile?include=account%2Cemail_settings%2Clikes%2Cnotifications%2Csuper_likes%2Ctinder_u%2Ctravel%2Cuser&locale={locale}")).ConfigureAwait(false);
+            var res = await Http.GetAsync(new Uri($"{Http.BaseAddress}/v2/profile?include=account%2Cemail_settings%2Clikes%2Cnotifications%2Csuper_likes%2Ctinder_u%2Ctravel%2Cuser&locale={locale}")).ConfigureAwait(false);
             var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
             var data = JsonConvert.DeserializeObject<TinderResponse<UserProfile>>(cont);
             return data;
@@ -182,7 +182,7 @@ namespace Tinder.Net
         /// <returns></returns>
         public async Task<TinderResponse<Annoyance>> GetCardsAsync(string locale="en-GB")
         {
-            var res = await _http.GetAsync(new Uri($"{_http.BaseAddress}/v2/recs/core?locale={locale}")).ConfigureAwait(false);
+            var res = await Http.GetAsync(new Uri($"{Http.BaseAddress}/v2/recs/core?locale={locale}")).ConfigureAwait(false);
             var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
             var data = JsonConvert.DeserializeObject<TinderResponse<Annoyance>>(cont);
             return data;
@@ -197,8 +197,76 @@ namespace Tinder.Net
         /// <returns>True, if successful</returns>
         public async Task<bool> SwipeAsync(SwipeType swipe_type, ulong s_number, string locale = "en-GB")
         {
-            var res = await _http.GetAsync($"{this._http.BaseAddress}/{swipe_type}/{this._id}?locale={locale}&s_number={s_number}").ConfigureAwait(false);
+            var res = await this.Http.GetAsync($"{this.Http.BaseAddress}/{swipe_type}/{this.Id}?locale={locale}&s_number={s_number}").ConfigureAwait(false);
             return res.IsSuccessStatusCode;
+        }
+
+        /// <summary>
+        /// Superlike a user
+        /// </summary>
+        /// <param name="user_id">User Id</param>
+        /// <returns>Unknown</returns>
+        public async Task<object> SuperLikeAsync(ulong user_id)
+        {
+            var res = await this.Http.GetAsync(new Uri($"{this.Http.BaseAddress}/like/{user_id}/super")).ConfigureAwait(false);
+            var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
+            if (res.IsSuccessStatusCode) this.TinderClientErrored?.Invoke(cont);
+            return cont;
+        }
+
+        /// <summary>
+        /// Like a user
+        /// </summary>
+        /// <param name="user_id">User Id</param>
+        /// <returns>Unknown</returns>
+        public async Task<object> LikeAsync(ulong user_id)
+        {
+            var res = await this.Http.GetAsync(new Uri($"{this.Http.BaseAddress}/like/{user_id}")).ConfigureAwait(false);
+            var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
+            if (res.IsSuccessStatusCode) this.TinderClientErrored?.Invoke(cont);
+            return cont;
+        }
+
+        /// <summary>
+        /// Pass on a user
+        /// </summary>
+        /// <param name="user_id">User Id</param>
+        /// <returns>Unknown</returns>
+        public async Task<object> PassAsync(ulong user_id)
+        {
+            var res = await this.Http.GetAsync(new Uri($"{this.Http.BaseAddress}/pass/{user_id}")).ConfigureAwait(false);
+            var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
+            if (res.IsSuccessStatusCode) this.TinderClientErrored?.Invoke(cont);
+            return cont;
+        }
+
+        /// <summary>
+        /// Perform an action (Like, Superlike, Pass) on a user.
+        /// </summary>
+        /// <param name="user_id">User Id</param>
+        /// <param name="type">Action Type (Like, Superlike, Pass)</param>
+        /// <returns></returns>
+        public async Task<object> PerformActionAsync(ulong user_id, TinderActionType type)
+        {
+            Uri url;
+            switch(type)
+            {
+                case TinderActionType.Like:
+                    url = new Uri($"{this.Http.BaseAddress}/like/{user_id}");
+                    break;
+
+                case TinderActionType.SuperLike:
+                    url = new Uri($"{this.Http.BaseAddress}/like/{user_id}/super");
+                    break;
+
+                default:
+                    url = new Uri($"{this.Http.BaseAddress}/pass/{user_id}");
+                    break;
+            }
+            var res = await this.Http.GetAsync(url).ConfigureAwait(false);
+            var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
+            if (res.IsSuccessStatusCode) this.TinderClientErrored?.Invoke(cont);
+            return cont;
         }
     }
 }
