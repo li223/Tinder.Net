@@ -251,16 +251,16 @@ namespace Tinder.Net
         /// <param name="user_id">User Id</param>
         /// <param name="type">Action Type (Like, Superlike, Pass)</param>
         /// <returns></returns>
-        public async Task<object> PerformActionAsync(string user_id, TinderActionType type)
+        public async Task<object> PerformActionAsync(string user_id, SwipeType type)
         {
             Uri url;
             switch(type)
             {
-                case TinderActionType.Like:
+                case SwipeType.Like:
                     url = new Uri($"{this.Http.BaseAddress}/like/{user_id}");
                     break;
 
-                case TinderActionType.SuperLike:
+                case SwipeType.Superlike:
                     url = new Uri($"{this.Http.BaseAddress}/like/{user_id}/super");
                     break;
 

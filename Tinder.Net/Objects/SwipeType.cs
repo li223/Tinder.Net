@@ -8,16 +8,16 @@
         /// <summary>
         /// Pass on the user
         /// </summary>
-        Pass,
+        Pass = 0,
 
         /// <summary>
         /// Like the user
         /// </summary>
-        Like,
+        Like = 1,
 
         /// <summary>
         /// Super Like the user
         /// </summary>
-        Superlike
+        Superlike = 2
     }
 }
