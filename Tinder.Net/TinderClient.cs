@@ -33,10 +33,7 @@ namespace Tinder.Net
         /// </summary>
         public TinderClient()
         {
-            this.Http = new HttpClient()
-            {
-                BaseAddress = new Uri("https://api.gotinder.com")
-            };
+            this.Http = new HttpClient() { BaseAddress = new Uri("https://api.gotinder.com") };
             this.Http.DefaultRequestHeaders.Add("accept", "application/json");
             this.CurrentUser = new CurrentUser();
         }
@@ -245,25 +242,22 @@ namespace Tinder.Net
         /// <returns></returns>
         public async Task<object> SwipeAsync(string user_id, ulong s_number, SwipeType type, string locale = "en-GB")
         {
-            Uri url;
+            object ret;
             switch(type)
             {
                 case SwipeType.Like:
-                    url = new Uri($"{this.Http.BaseAddress}/like/{user_id}?locale={locale}&s_number={s_number}");
+                    ret = await LikeAsync(user_id, s_number, locale).ConfigureAwait(false);
                     break;
 
                 case SwipeType.Superlike:
-                    url = new Uri($"{this.Http.BaseAddress}/like/{user_id}/super?locale={locale}&s_number={s_number}");
+                    ret = await SuperLikeAsync(user_id, s_number, locale).ConfigureAwait(false);
                     break;
 
                 default:
-                    url = new Uri($"{this.Http.BaseAddress}/pass/{user_id}?locale={locale}&s_number={s_number}");
+                    ret = await PassAsync(user_id, s_number, locale).ConfigureAwait(false);
                     break;
             }
-            var res = await this.Http.GetAsync(url).ConfigureAwait(false);
-            var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
-            if (!res.IsSuccessStatusCode) this.TinderClientErrored?.Invoke(cont);
-            return cont;
+            return ret;
         }
     }
 }
