@@ -674,6 +674,30 @@
             <param name="locale">Locale</param>
             <returns></returns>
         </member>
+        <member name="M:Tinder.Net.TinderClient.SuperLikeAsync(System.String,System.String)">
+            <summary>
+            Superlike a user
+            </summary>
+            <param name="user_id">User Id</param>
+            <param name="locale">Locale</param>
+            <returns>Unknown</returns>
+        </member>
+        <member name="M:Tinder.Net.TinderClient.LikeAsync(System.String,System.String)">
+            <summary>
+            Like a user
+            </summary>
+            <param name="user_id">User Id</param>
+            <param name="locale">Locale</param>
+            <returns>Unknown</returns>
+        </member>
+        <member name="M:Tinder.Net.TinderClient.PassAsync(System.String,System.String)">
+            <summary>
+            Pass on a user
+            </summary>
+            <param name="user_id">User Id</param>
+            <param name="locale">Locale</param>
+            <returns>Unknown</returns>
+        </member>
         <member name="M:Tinder.Net.TinderClient.StartTinderAsync(System.Func{System.Threading.Tasks.Task{System.Int32}},System.UInt64,System.Int32,System.String,System.String)">
             <summary>
             Single method to auth and log into Tinder
@@ -699,39 +723,29 @@
             <param name="locale"></param>
             <returns></returns>
         </member>
-        <member name="M:Tinder.Net.TinderClient.SuperLikeAsync(System.String,System.UInt64,System.String)">
+        <member name="M:Tinder.Net.TinderClient.SwipeAsync(Tinder.Net.Objects.CardProfile,Tinder.Net.Objects.SwipeType,System.String)">
             <summary>
-            Superlike a user
+            Perform a swipe action (Like, Superlike, Pass) on a user.
             </summary>
-            <param name="user_id">User Id</param>
-            <param name="s_number">User Sequence Number</param>
+            <param name="profile">The profile retrieved from calling GetAllCardsAsync()</param>
+            <param name="type">Swipe Type (Like, Superlike, Pass)</param>
             <param name="locale">Locale</param>
-            <returns>Unknown</returns>
+            <returns></returns>
         </member>
-        <member name="M:Tinder.Net.TinderClient.LikeAsync(System.String,System.UInt64,System.String)">
+        <member name="M:Tinder.Net.TinderClient.SwipeAsync(Tinder.Net.Objects.UserProfile,Tinder.Net.Objects.SwipeType,System.String)">
             <summary>
-            Like a user
+            Perform a swipe action (Like, Superlike, Pass) on a user.
             </summary>
-            <param name="user_id">User Id</param>
-            <param name="s_number">User Sequence Number</param>
+            <param name="profile">The profile retrieved from calling GetProfileAsync()</param>
+            <param name="type">Swipe Type (Like, Superlike, Pass)</param>
             <param name="locale">Locale</param>
-            <returns>Unknown</returns>
+            <returns></returns>
         </member>
-        <member name="M:Tinder.Net.TinderClient.PassAsync(System.String,System.UInt64,System.String)">
-            <summary>
-            Pass on a user
-            </summary>
-            <param name="user_id">User Id</param>
-            <param name="s_number">User Sequence Number</param>
-            <param name="locale">Locale</param>
-            <returns>Unknown</returns>
-        </member>
-        <member name="M:Tinder.Net.TinderClient.SwipeAsync(System.String,System.UInt64,Tinder.Net.Objects.SwipeType,System.String)">
+        <member name="M:Tinder.Net.TinderClient.SwipeAsync(System.String,Tinder.Net.Objects.SwipeType,System.String)">
             <summary>
             Perform a swipe action (Like, Superlike, Pass) on a user.
             </summary>
             <param name="user_id">User Id</param>
-            <param name="s_number">User Sequence Number</param>
             <param name="type">Swipe Type (Like, Superlike, Pass)</param>
             <param name="locale">Locale</param>
             <returns></returns>
