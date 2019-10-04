@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Tinder.Net.Objects
+﻿namespace Tinder.Net.Objects
 {
     internal class CurrentUser
     {
+        internal int AreaCode { get; set; }
+
         internal ulong PhoneNumber { get; set; }
 
         internal string AuthToken { get; set; }

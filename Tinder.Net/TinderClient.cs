@@ -38,6 +38,8 @@ namespace Tinder.Net
             this.CurrentUser = new CurrentUser();
         }
 
+        #region Private Methods
+
         /// <summary>
         /// Get auth code from Tinder, call this method first
         /// </summary>
@@ -46,34 +48,17 @@ namespace Tinder.Net
         /// <param name="auth_type">Type of auth</param>
         /// <param name="locale">Locale</param>
         /// <returns></returns>
-        private async Task<TinderResponse<OtpExpectation>> GetAuthCodeAsync(ulong phone_number, int area_code = 44, string auth_type = "sms", string locale = "en-GB")
+        private async Task<TinderResponse<OtpExpectation>> GetAuthCodeAsync(ulong phone_number, int area_code, string auth_type = "sms", string locale = "en-GB")
         {
             if (auth_type != "sms")
             {
                 this.TinderClientErrored?.Invoke("Only SMS auth is supported");
                 return null;
             }
-            var numstr = phone_number.ToString();
-            if(!numstr.StartsWith(area_code.ToString()) && numstr.Length != 13)
-            {
-                if (area_code == 44)
-                {
-                    if (numstr.Length == 11) numstr = $"{area_code}{numstr}";
-                    else if (numstr.Length == 10) numstr = $"{area_code}0{numstr}";
-                    else
-                    {
-                        this.TinderClientErrored?.Invoke("Invalid phone number supplied");
-                        return null;
-                    }
-                }
-                else
-                {
-                    this.TinderClientErrored?.Invoke("Invalid phone number supplied");
-                    return null;
-                }
-            }
-            this.CurrentUser.PhoneNumber = ulong.Parse(numstr);
-            var res = await Http.PostAsync($"{Http.BaseAddress}/v2/auth/sms/send?auth_type={auth_type}&locale={locale}", new StringContent(string.Concat(@"{""phone_number"":""", this.CurrentUser.PhoneNumber,@"""}"), Encoding.UTF8, "application/json")).ConfigureAwait(false);
+            var numstr = (phone_number.ToString().StartsWith(area_code.ToString())) ? phone_number.ToString() : $"{area_code}{phone_number}";
+            this.CurrentUser.PhoneNumber = phone_number;
+            this.CurrentUser.AreaCode = area_code;
+            var res = await Http.PostAsync($"{Http.BaseAddress}/v2/auth/sms/send?auth_type={auth_type}&locale={locale}", new StringContent(string.Concat(@"{""phone_number"":""", numstr, @"""}"), Encoding.UTF8, "application/json")).ConfigureAwait(false);
             var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
             var data = JsonConvert.DeserializeObject<TinderResponse<OtpExpectation>>(cont);
             if (!data.Data.HasSmsSent) TinderClientErrored?.Invoke("Otp Token has not been sent");
@@ -144,6 +129,52 @@ namespace Tinder.Net
         }
 
         /// <summary>
+        /// Superlike a user
+        /// </summary>
+        /// <param name="user_id">User Id</param>
+        /// <param name="locale">Locale</param>
+        /// <returns>Unknown</returns>
+        private async Task<object> SuperLikeAsync(string user_id, string locale = "en-GB")
+        {
+            var res = await this.Http.GetAsync(new Uri($"{this.Http.BaseAddress}/like/{user_id}/super?locale={locale}")).ConfigureAwait(false);
+            var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
+            if (!res.IsSuccessStatusCode) this.TinderClientErrored?.Invoke(cont);
+            return cont;
+        }
+
+        /// <summary>
+        /// Like a user
+        /// </summary>
+        /// <param name="user_id">User Id</param>
+        /// <param name="locale">Locale</param>
+        /// <returns>Unknown</returns>
+        private async Task<object> LikeAsync(string user_id, string locale = "en-GB")
+        {
+            var res = await this.Http.GetAsync(new Uri($"{this.Http.BaseAddress}/like/{user_id}?locale={locale}")).ConfigureAwait(false);
+            var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
+            if (!res.IsSuccessStatusCode) this.TinderClientErrored?.Invoke(cont);
+            return cont;
+        }
+
+        /// <summary>
+        /// Pass on a user
+        /// </summary>
+        /// <param name="user_id">User Id</param>
+        /// <param name="locale">Locale</param>
+        /// <returns>Unknown</returns>
+        private async Task<object> PassAsync(string user_id, string locale = "en-GB")
+        {
+            var res = await this.Http.GetAsync(new Uri($"{this.Http.BaseAddress}/pass/{user_id}?locale={locale}")).ConfigureAwait(false);
+            var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
+            if (!res.IsSuccessStatusCode) this.TinderClientErrored?.Invoke(cont);
+            return cont;
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
         /// Single method to auth and log into Tinder
         /// </summary>
         /// <param name="auth_code">User defined method to get the auth code</param>
@@ -152,7 +183,7 @@ namespace Tinder.Net
         /// <param name="auth_type">Authentication Type</param>
         /// <param name="locale">Locale</param>
         /// <returns>LoginData</returns>
-        public async Task StartTinderAsync(Func<Task<int>> auth_code, ulong phone_number, int area_code = 44, string auth_type = "sms", string locale = "en-GB")
+        public async Task StartTinderAsync(Func<Task<int>> auth_code, ulong phone_number, int area_code, string auth_type = "sms", string locale = "en-GB")
         {
             var otpe = await GetAuthCodeAsync(phone_number, area_code, auth_type, locale).ConfigureAwait(false);
             await VerifyCodeAsync(otpe.Data, await auth_code(), auth_type, locale).ConfigureAwait(false);
@@ -169,7 +200,7 @@ namespace Tinder.Net
             var res = await Http.GetAsync(new Uri($"{Http.BaseAddress}/v2/profile?include=account%2Cemail_settings%2Clikes%2Cnotifications%2Csuper_likes%2Ctinder_u%2Ctravel%2Cuser&locale={locale}")).ConfigureAwait(false);
             var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
             var data = JsonConvert.DeserializeObject<TinderResponse<UserProfile>>(cont);
-            if(data?.Error != null) this.TinderClientErrored?.Invoke(data.Error?.Message);
+            if (data?.Error != null) this.TinderClientErrored?.Invoke(data.Error?.Message);
             return data;
         }
 
@@ -178,7 +209,7 @@ namespace Tinder.Net
         /// </summary>
         /// <param name="locale"></param>
         /// <returns></returns>
-        public async Task<TinderResponse<Annoyance>> GetCardsAsync(string locale="en-GB")
+        public async Task<TinderResponse<Annoyance>> GetCardsAsync(string locale = "en-GB")
         {
             var res = await Http.GetAsync(new Uri($"{Http.BaseAddress}/v2/recs/core?locale={locale}")).ConfigureAwait(false);
             var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -188,76 +219,88 @@ namespace Tinder.Net
         }
 
         /// <summary>
-        /// Superlike a user
+        /// Perform a swipe action (Like, Superlike, Pass) on a user.
         /// </summary>
-        /// <param name="user_id">User Id</param>
-        /// <param name="s_number">User Sequence Number</param>
+        /// <param name="profile">The profile retrieved from calling GetAllCardsAsync()</param>
+        /// <param name="type">Swipe Type (Like, Superlike, Pass)</param>
         /// <param name="locale">Locale</param>
-        /// <returns>Unknown</returns>
-        public async Task<object> SuperLikeAsync(string user_id, ulong s_number, string locale = "en-GB")
+        /// <returns></returns>
+        public async Task<object> SwipeAsync(CardProfile profile, SwipeType type, string locale = "en-GB")
         {
-            var res = await this.Http.GetAsync(new Uri($"{this.Http.BaseAddress}/like/{user_id}/super?locale={locale}&s_number={s_number}")).ConfigureAwait(false);
-            var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
-            if (!res.IsSuccessStatusCode) this.TinderClientErrored?.Invoke(cont);
-            return cont;
+            var user_id = profile.UserInfo.Id;
+            object ret;
+            switch (type)
+            {
+                case SwipeType.Like:
+                    ret = await LikeAsync(user_id, locale).ConfigureAwait(false);
+                    break;
+
+                case SwipeType.Superlike:
+                    ret = await SuperLikeAsync(user_id, locale).ConfigureAwait(false);
+                    break;
+
+                default:
+                    ret = await PassAsync(user_id, locale).ConfigureAwait(false);
+                    break;
+            }
+            return ret;
         }
 
         /// <summary>
-        /// Like a user
+        /// Perform a swipe action (Like, Superlike, Pass) on a user.
         /// </summary>
-        /// <param name="user_id">User Id</param>
-        /// <param name="s_number">User Sequence Number</param>
+        /// <param name="profile">The profile retrieved from calling GetProfileAsync()</param>
+        /// <param name="type">Swipe Type (Like, Superlike, Pass)</param>
         /// <param name="locale">Locale</param>
-        /// <returns>Unknown</returns>
-        public async Task<object> LikeAsync(string user_id, ulong s_number, string locale = "en-GB")
+        /// <returns></returns>
+        public async Task<object> SwipeAsync(UserProfile profile, SwipeType type, string locale = "en-GB")
         {
-            var res = await this.Http.GetAsync(new Uri($"{this.Http.BaseAddress}/like/{user_id}?locale={locale}&s_number={s_number}")).ConfigureAwait(false);
-            var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
-            if (!res.IsSuccessStatusCode) this.TinderClientErrored?.Invoke(cont);
-            return cont;
-        }
+            var user_id = profile.Info.Id;
+            object ret;
+            switch (type)
+            {
+                case SwipeType.Like:
+                    ret = await LikeAsync(user_id, locale).ConfigureAwait(false);
+                    break;
 
-        /// <summary>
-        /// Pass on a user
-        /// </summary>
-        /// <param name="user_id">User Id</param>
-        /// <param name="s_number">User Sequence Number</param>
-        /// <param name="locale">Locale</param>
-        /// <returns>Unknown</returns>
-        public async Task<object> PassAsync(string user_id, ulong s_number, string locale = "en-GB")
-        {
-            var res = await this.Http.GetAsync(new Uri($"{this.Http.BaseAddress}/pass/{user_id}?locale={locale}&s_number={s_number}")).ConfigureAwait(false);
-            var cont = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
-            if (!res.IsSuccessStatusCode) this.TinderClientErrored?.Invoke(cont);
-            return cont;
+                case SwipeType.Superlike:
+                    ret = await SuperLikeAsync(user_id, locale).ConfigureAwait(false);
+                    break;
+
+                default:
+                    ret = await PassAsync(user_id, locale).ConfigureAwait(false);
+                    break;
+            }
+            return ret;
         }
 
         /// <summary>
         /// Perform a swipe action (Like, Superlike, Pass) on a user.
         /// </summary>
         /// <param name="user_id">User Id</param>
-        /// <param name="s_number">User Sequence Number</param>
         /// <param name="type">Swipe Type (Like, Superlike, Pass)</param>
         /// <param name="locale">Locale</param>
         /// <returns></returns>
-        public async Task<object> SwipeAsync(string user_id, ulong s_number, SwipeType type, string locale = "en-GB")
+        public async Task<object> SwipeAsync(string user_id, SwipeType type, string locale = "en-GB")
         {
             object ret;
-            switch(type)
+            switch (type)
             {
                 case SwipeType.Like:
-                    ret = await LikeAsync(user_id, s_number, locale).ConfigureAwait(false);
+                    ret = await LikeAsync(user_id, locale).ConfigureAwait(false);
                     break;
 
                 case SwipeType.Superlike:
-                    ret = await SuperLikeAsync(user_id, s_number, locale).ConfigureAwait(false);
+                    ret = await SuperLikeAsync(user_id, locale).ConfigureAwait(false);
                     break;
 
                 default:
-                    ret = await PassAsync(user_id, s_number, locale).ConfigureAwait(false);
+                    ret = await PassAsync(user_id, locale).ConfigureAwait(false);
                     break;
             }
             return ret;
         }
+
+        #endregion
     }
 }
